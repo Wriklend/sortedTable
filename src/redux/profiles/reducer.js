@@ -7,13 +7,13 @@ import {
 function reducer(state = [], action) {
 	switch (action.type) {
 		case LOAD_PROFILES:
-			return null;
+			return state;
 
 		case LOAD_PROFILES_FAILURE:
-			return null;
+			return state;
 
 		case LOAD_PROFILES_SUCCESS:
-			return action.payload;
+			return {profiles: action.payload};
 
 		default:
 			return state;

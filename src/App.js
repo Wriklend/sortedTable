@@ -1,26 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { connect } from 'react-redux';
+import { loadProfiles } from './redux/profiles/actions';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
+
+  fetchProfiles = () => {
+    this.props.loadProfiles();
+    console.log(this.props)
+  }
+
+  componentDidMount = () => {
+    this.fetchProfiles();
+  }
+
+  render() {
+
+    return (
+      <table>
+      </table>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({ profiles: state.profiles });
+const mapDispatchToProps = dispatch => ({
+  loadProfiles: (payload) => dispatch(loadProfiles(payload)),
+});
+
+export { App };
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(App);
+

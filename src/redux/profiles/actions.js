@@ -26,6 +26,6 @@ export function loadProfiles() {
       .then(
         r => dispatch(loadProfilesSuccess(r)), 
         err => dispatch(loadProfilesFailure(err))
-        );
+      );
   }
 }

@@ -10,11 +10,11 @@ export default class TableHeader extends React.Component {
     return (
       <thead>
         <tr>
-          {this.props.headers.map((item, index) => <th 
-          key={index}
-          onClick={this.handleClick}
-          name={item}
-          >{item}</th>)}
+          {this.props.headers.map((item, index) => 
+            <th key={index} onClick={this.handleClick} name={item}>
+              {item}
+            </th>
+          )}
         </tr>
       </thead>
     );

@@ -9,13 +9,13 @@ export default class Table extends React.Component {
       reversed: false,
     };
   }
-  
+
   componentDidMount = () => {
     if (localStorage.getItem('sorting')) {
       this.setState({
         sortedBy: JSON.parse(localStorage.getItem('sorting')).sortedBy,
         reversed: JSON.parse(localStorage.getItem('sorting')).reversed,
-      })
+      });
     }
   }
 
@@ -38,6 +38,7 @@ export default class Table extends React.Component {
         if (a[sorting.sortedBy] < b[sorting.sortedBy]) return -1;
       }).reverse();
     }
+
     // eslint-disable-next-line array-callback-return
     return this.props.profiles.sort((a, b) => {
       if (a[sorting.sortedBy] > b[sorting.sortedBy]) return 1;
@@ -58,6 +59,7 @@ export default class Table extends React.Component {
       });
       return;
     }
+
     localStorage.setItem('sorting', JSON.stringify({
       sortedBy: name,
       reversed: false
@@ -85,6 +87,7 @@ export default class Table extends React.Component {
         </table>
       );
     }
+
     return (
       <table border='1'>
         <TableHeader headers={[...this.getHeaders()]} onHandleClick={this.getSort}/>

@@ -8,4 +8,3 @@ const promiseResponse = data =>
 	});
 
 export const getProfiles = () => promiseResponse(profiles);
-

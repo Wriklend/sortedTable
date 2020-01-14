@@ -1,13 +1,23 @@
 import React from 'react';
 
-export default ({ headers }) => {
+export default class TableHeader extends React.Component {
+
+  handleClick = (e) => {
+    e.persist()
+    this.props.onHandleClick(e.target.attributes.name.value);
+  }
+
+  render() {
     return (
       <thead>
         <tr>
-          {headers.map((item, index) =>
-            <th key={index}>{item}</th>
-          )}
+          {this.props.headers.map((item, index) => <th 
+          key={index}
+          onClick={this.handleClick}
+          name={item}
+          >{item}</th>)}
         </tr>
       </thead>
     );
+  }
 }

@@ -1,63 +1,99 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { loadProfiles, getSortProfiles } from '../../redux/profiles/actions';
 import TableHeader from './TableHeader/TableHeader';
-import store from '../../redux/store/store';
 
 export default class Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      profiles: [],
+      sortedBy: '',
+      reversed: false,
     };
   }
   
-  static getDerivedStateFromProps(props) {
-    return {
-      profiles: props.profiles
-    };
+  componentDidMount = () => {
+    if (localStorage.getItem('sorting')) {
+      this.setState({
+        sortedBy: JSON.parse(localStorage.getItem('sorting')).sortedBy,
+        reversed: JSON.parse(localStorage.getItem('sorting')).reversed,
+      })
+    }
   }
 
   getHeaders = () => {
     let headers = [];
-    for (let key in this.state.profiles[0]) {
+    for (let key in this.props.profiles[0]) {
       headers.push(key);
     }
     return headers;
   }
 
-  sortFunc = (name) => {
+  sortFunc = (sorting) => {
+    if (sorting.reversed) {
+      // eslint-disable-next-line array-callback-return
+      return this.props.profiles.sort((a, b) => {
+        if (a[sorting.sortedBy] > b[sorting.sortedBy]) return 1;
+        if (a[sorting.sortedBy] === b[sorting.sortedBy]) return 0;
+        if (a[sorting.sortedBy] < b[sorting.sortedBy]) return -1;
+      }).reverse();
+    }
+    // eslint-disable-next-line array-callback-return
     return this.props.profiles.sort((a, b) => {
-      if (a[name] > b[name]) return 1;
-      if (a[name] === b[name]) return 0;
-      if (a[name] < b[name]) return -1;
+      if (a[sorting.sortedBy] > b[sorting.sortedBy]) return 1;
+      if (a[sorting.sortedBy] === b[sorting.sortedBy]) return 0;
+      if (a[sorting.sortedBy] < b[sorting.sortedBy]) return -1;
     });
   }
 
   getSort = (name) => {
-    this.setState({
-      profiles: this.sortFunc(name),
-    })
-  }
-
-  showState = () => {
-    console.log(this.state, 'state');
-    console.log(this.props, 'props');
+    if (name === this.state.sortedBy) {
+      localStorage.setItem('sorting', JSON.stringify({
+        sortedBy: name,
+        reversed: !this.state.reversed
+      }));
+      this.setState({
+        sortedBy: name,
+        reversed: !this.state.reversed,
+      });
+      return;
+    }
+      localStorage.setItem('sorting', JSON.stringify({
+        sortedBy: name,
+        reversed: false
+      }));
+      this.setState({
+        sortedBy: name,
+        reversed: false,
+      });
   }
 
   render() {
-    console.log('table render')
+    if (localStorage.getItem('sorting')) {
+      return (
+        <table border='1'>
+          <TableHeader headers={this.getHeaders()} onHandleClick={this.getSort}/>
+          <tbody>
+            {this.sortFunc(JSON.parse(localStorage.getItem('sorting'))).map((elem, index) => 
+              <tr key={index}>
+                {this.getHeaders().map((item, index) => 
+                  <td key={index}>{elem[item]}</td>
+                )}
+              </tr>
+              )}
+          </tbody>
+        </table>
+      );
+    }
     return (
       <table border='1'>
         <TableHeader headers={this.getHeaders()} onHandleClick={this.getSort}/>
         <tbody>
-        {this.state.profiles.map((elem, index) => 
-          <tr key={index}>
-            {this.getHeaders().map((item, index) => 
-            <td key={index} onClick={this.showState}>{elem[item]}</td>
-            )}
-          </tr>
-        )}
+          {this.props.profiles.map((elem, index) => 
+            <tr key={index}>
+              {this.getHeaders().map((item, index) => 
+                <td key={index}>{elem[item]}</td>
+              )}
+            </tr>
+          )}
         </tbody>
       </table>
     );

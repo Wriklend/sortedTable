@@ -7,5 +7,4 @@ const initialState = { profiles: [] };
 
 const store = createStore(reducer, initialState, applyMiddleware(thunk, logger));
 
-
 export default store;

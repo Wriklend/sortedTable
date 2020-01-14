@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default class TableHeader extends React.Component {
-
   handleClick = (e) => {
     e.persist()
     this.props.onHandleClick(e.target.attributes.name.value);

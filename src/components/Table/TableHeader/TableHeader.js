@@ -1,9 +1,9 @@
 import React from 'react';
+import HeadCell from './HeadCell/HeadCell'
 
 export default class TableHeader extends React.Component {
-  handleClick = (e) => {
-    e.persist()
-    this.props.onHandleClick(e.target.attributes.name.value);
+  handleClick = (name, reverse) => {
+    this.props.onHandleClick(name, reverse);
   }
 
   render() {
@@ -11,9 +11,12 @@ export default class TableHeader extends React.Component {
       <thead>
         <tr>
           {this.props.headers.map((item, index) => 
-            <th key={index} onClick={this.handleClick} name={item}>
-              {item}
-            </th>
+            <HeadCell 
+              key={index} 
+              clickListener={this.handleClick} 
+              name={item} item={item} 
+              sortedName={this.props.sortedName}
+            />
           )}
         </tr>
       </thead>
